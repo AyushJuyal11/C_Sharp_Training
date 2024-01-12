@@ -10,46 +10,44 @@ namespace ToDoList.Controllers
     public class ToDoListController : ControllerBase
     {
 
-        private TaskOperations _task = new();
+        private ToDoListOperations _task = new();
 
         [HttpGet("get-all-tasks")]
-        public IActionResult Index()
+        public async Task<IActionResult> GetAllTasksAsync()
         {
-            var tasks = _task.GetAllTasks();
+            var tasks = await _task.GettingAllTasksAsync();
             if (tasks == null) return NotFound();
             else return Ok(tasks);
         }
 
-        [HttpPost("add-new-item")]
-        public IActionResult Post([FromBody] DAL.Entities.Task task)
+        [HttpPost("add-task")]
+        public async Task<IActionResult> AddTaskAsync([FromBody] ToDoItem item)
         {
-            int result = _task.AddNewTask(task);
+            int result = await _task.AddNewTaskAsync(item);
             if (result <= 0) return BadRequest();
-            else return Ok("task created with task id = " + task.Id); 
+            else return Ok("task created with task id = " + item.Id); 
         }
 
-        [HttpGet("get-task-by-id")]
-        public IActionResult Get(int id)
+        [HttpGet("get-task")]
+        public async Task<IActionResult> GetTaskAsync(int id)
         {
-
-            var t = _task.GetTaskById(id);
+            var t = await _task.GetTaskByIdAsync(id);
             if(t == null) return NotFound();
             return Ok(t);
-
         }
 
         [HttpPut("update-task")]
-        public IActionResult Put([FromBody]DAL.Entities.Task task)
+        public async Task<IActionResult> UpdateTaskAsync([FromBody]ToDoItem item)
         {
-            var result = _task.UpdateTask(task);
-            if (result <= 0) return BadRequest();
-            else return Ok("task updated"); 
+            var result = await _task.UpdatingTaskAsync(item);
+            if (result < 0) return BadRequest();
+            else return Ok($"task updated with task id {item.Id}"); 
         }
 
-        [HttpDelete("delete-list-item")]
-        public IActionResult Delete(int id)
+        [HttpDelete("delete-task")]
+        public async Task<IActionResult> DeleteTaskAsync(int id)
         {
-            var result = _task.DeleteTask(id);
+            var result = await _task.DeletingTaskAsync(id);
             if(result <= 0) return NotFound();
             return Ok("task deleted");
         }
