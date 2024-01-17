@@ -1,11 +1,9 @@
-﻿
-namespace ToDoList.DAL.Entities
+﻿namespace ToDoList.Models.ResponseViewModels
 {
-    public class ToDoItem
+    public class ToDoItemResponse
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
-        
     }
 }

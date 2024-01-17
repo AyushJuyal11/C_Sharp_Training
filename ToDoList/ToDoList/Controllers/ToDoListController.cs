@@ -1,7 +1,12 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ToDoList.DAL.DbContexts;
 using ToDoList.DAL.Entities;
 using ToDoList.DAL.Repositories.Implementations;
 using ToDoList.DAL.Repositories.Interfaces;
+using ToDoList.Models.RequestViewModels;
+using ToDoList.Models.ResponseViewModels;
+using ToDoList.Services.Interfaces;
 
 namespace ToDoList.Controllers
 {
@@ -10,46 +15,59 @@ namespace ToDoList.Controllers
     public class ToDoListController : ControllerBase
     {
 
-        private ToDoListOperations _task = new();
+        private readonly IToDoItemService _services; 
+        public ToDoListController(IToDoItemService services)
+        {
+            _services=services;
+        }
 
         [HttpGet("get-all-tasks")]
-        public async Task<IActionResult> GetAllTasksAsync()
+        public async Task<ActionResult<IEnumerable<ToDoItemResponse>>> GetAllTasksAsync()
         {
-            var tasks = await _task.GettingAllTasksAsync();
-            if (tasks == null) return NotFound();
-            else return Ok(tasks);
+            var allItems = await _services.GetAllItemsAsync();
+            if (allItems == null) return NotFound(); 
+            else return Ok(allItems);
         }
 
         [HttpPost("add-task")]
-        public async Task<IActionResult> AddTaskAsync([FromBody] ToDoItem item)
+        public async Task<ActionResult> AddTaskAsync([FromBody] ToDoItemRequest item)
         {
-            int result = await _task.AddNewTaskAsync(item);
-            if (result <= 0) return BadRequest();
-            else return Ok("task created with task id = " + item.Id); 
+            var newItem = await _services.AddItemAsync(item);
+            if (newItem == null) return BadRequest(); 
+            return Ok($"Item with id : {item.ID} created"); 
         }
 
         [HttpGet("get-task")]
-        public async Task<IActionResult> GetTaskAsync(int id)
+        public async Task<ActionResult> GetTaskAsync(int id)
         {
-            var t = await _task.GetTaskByIdAsync(id);
-            if(t == null) return NotFound();
-            return Ok(t);
+            var requestedItem = await _services.GetItemByIdAsync(id);
+            if (requestedItem != null)
+            {
+                return Ok(requestedItem);
+            }
+            else return NotFound(); 
         }
 
         [HttpPut("update-task")]
-        public async Task<IActionResult> UpdateTaskAsync([FromBody]ToDoItem item)
+        public async Task<ActionResult> UpdateTaskAsync([FromBody] ToDoItemRequest item)
         {
-            var result = await _task.UpdatingTaskAsync(item);
-            if (result < 0) return BadRequest();
-            else return Ok($"task updated with task id {item.Id}"); 
+            var updatedItem = await _services.UpdateItemAsync(item);
+            if (updatedItem != null)
+            {
+                return Ok($"task updated with id {updatedItem.Id}"); 
+            }
+            else return NotFound();
         }
 
         [HttpDelete("delete-task")]
-        public async Task<IActionResult> DeleteTaskAsync(int id)
+        public async Task<ActionResult> DeleteTaskAsync(int id)
         {
-            var result = await _task.DeletingTaskAsync(id);
-            if(result <= 0) return NotFound();
-            return Ok("task deleted");
+            var deletedItem = await _services.DeleteItemByIdAsync(id);
+            if (deletedItem != null)
+            {
+                return Ok("Item deleted");
+            }
+            else return NotFound(); 
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ToDoList.DAL.Entities; 
+﻿using ToDoList.DAL.Entities;
+using ToDoList.Models.RequestViewModels;
 
 namespace ToDoList.DAL.Repositories.Interfaces
 {
@@ -7,8 +8,8 @@ namespace ToDoList.DAL.Repositories.Interfaces
 
         Task<IEnumerable<ToDoItem>> GettingAllTasksAsync(); 
         Task<ToDoItem> GetTaskByIdAsync(int id);
-        Task<int> AddNewTaskAsync(ToDoItem item);
-        Task<int> DeletingTaskAsync(int id);
-        Task<int> UpdatingTaskAsync(ToDoItem item);
+        Task<ToDoItem> AddNewTaskAsync(ToDoItem item);
+        Task<ToDoItem> DeletingTaskAsync(int id);
+        Task<ToDoItem> UpdatingTaskAsync(ToDoItem item);
     }
 }

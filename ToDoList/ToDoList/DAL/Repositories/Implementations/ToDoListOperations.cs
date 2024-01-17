@@ -1,88 +1,74 @@
-﻿using ToDoList.DAL.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using ToDoList.DAL.DbContexts;
+using ToDoList.DAL.Entities;
 using ToDoList.DAL.Repositories.Interfaces;
-using Newtonsoft.Json;
-using ToDoList.DAL.JsonFile;
-using Newtonsoft.Json.Linq;
+using ToDoList.Models.RequestViewModels;
 
 namespace ToDoList.DAL.Repositories.Implementations
 {
     public class ToDoListOperations : IToDoListOperations
     {
-        public async Task<IEnumerable<ToDoItem>> GettingAllTasksAsync()
+        private ToDoApplicationContext _context; 
+        public ToDoListOperations(ToDoApplicationContext context)
         {
-            var toDoItemsJsonString = await File.ReadAllTextAsync(JsonFilePath.path);
-            List<ToDoItem> toDoItemEntities = new(); 
-            if(toDoItemsJsonString == null) return toDoItemEntities;
-
-            toDoItemEntities = JsonConvert.DeserializeObject<List<ToDoItem>>(toDoItemsJsonString); 
-            return toDoItemEntities;
+            _context=context;
         }
 
+        public async Task<ToDoItem> AddNewTaskAsync(ToDoItem item)
+        {
+            _context.Add(item); 
+            await _context.SaveChangesAsync();
+            return item;
+        }
+
+        public async Task<ToDoItem> DeletingTaskAsync(int id)
+        {
+            var item = await _context.ToDoItems.FindAsync(id);
+            if (item == null)
+            {
+                return new ToDoItem(); 
+            }
+
+            else
+            {
+                _context.Remove(item);
+                _context.SaveChanges();
+                return item; 
+            }
+        }
 
         public async Task<ToDoItem> GetTaskByIdAsync(int id)
         {
-            var toDoItemsJsonString = await File.ReadAllTextAsync(JsonFilePath.path);
-            var toDoItemEntities = JsonConvert.DeserializeObject<List<ToDoItem>>(toDoItemsJsonString);
-
-            if(toDoItemEntities.Count == 0) 
-                return new ToDoItem();
-
-            else
-                return toDoItemEntities.Where(t => t.Id == id).FirstOrDefault();
-        }
-
-        public async Task<int> AddNewTaskAsync(ToDoItem task)
-        {
-            if(task.Id < 0 ||  task.Id > int.MaxValue)
+            var requiredItem = await _context.ToDoItems.FindAsync(id); 
+            if(requiredItem == null)
             {
-                return -1; 
+                return new ToDoItem();
             }
-
-            var toDoItemsJsonString = await File.ReadAllTextAsync(JsonFilePath.path);
-
-            var toDoItemEntities = JsonConvert.DeserializeObject<List<ToDoItem>>(toDoItemsJsonString) ?? new List<ToDoItem>();
-
-            var ifTaskExists = toDoItemEntities.Where((t) => t.Id == task.Id).FirstOrDefault();
-            if (ifTaskExists != null) return -1; 
-
-
-            toDoItemEntities.Add(task);
-            toDoItemsJsonString = JsonConvert.SerializeObject(toDoItemEntities , Formatting.Indented);
-            File.WriteAllText(JsonFilePath.path, toDoItemsJsonString);
-            return 1; 
+            return requiredItem;
         }
 
-
-        public async Task<int> DeletingTaskAsync(int id)
+        public async Task<IEnumerable<ToDoItem>> GettingAllTasksAsync()
         {
-            if (id < 0 || id > int.MaxValue) return -1; 
-            var toDoItemsJsonString = await File.ReadAllTextAsync(JsonFilePath.path);
-            var toDoItemEntities = JsonConvert.DeserializeObject<List<ToDoItem>>(toDoItemsJsonString);
-            if(toDoItemEntities.Count == 0) return -1; 
-
-            var taskToRemove = toDoItemEntities.Where(t => t.Id == id).FirstOrDefault();
-            if (taskToRemove == null) return -1; 
-
-            toDoItemEntities.Remove(taskToRemove);
-            toDoItemsJsonString = JsonConvert.SerializeObject(toDoItemEntities); 
-            File.WriteAllText(JsonFilePath.path, toDoItemsJsonString);
-            return 1; 
+            var allItems =  await _context.ToDoItems.ToListAsync();
+            if (allItems.Count != 0)
+            {
+                return allItems;
+            }
+            else return new List<ToDoItem>();
         }
-        
-        public async Task<int> UpdatingTaskAsync(ToDoItem task)
+
+        public async Task<ToDoItem> UpdatingTaskAsync(ToDoItem item)
         {
-            var toDoItemsJsonString = await File.ReadAllTextAsync(JsonFilePath.path);
-            var toDoItemEntities = JsonConvert.DeserializeObject<List<ToDoItem>>(toDoItemsJsonString);
-            if (toDoItemEntities.Count == 0) return -1; 
-
-            var taskToUpdate = toDoItemEntities.Where(t => t.Id == task.Id).FirstOrDefault();
-            if(taskToUpdate == null) return -1;
-            toDoItemEntities.Remove(taskToUpdate);
-            toDoItemEntities.Add(task); 
-
-            toDoItemsJsonString = JsonConvert.SerializeObject(toDoItemEntities);
-            File.WriteAllText(JsonFilePath.path, toDoItemsJsonString); 
-            return 1; 
+            var updatedItem = await _context.ToDoItems.FindAsync(item.Id); 
+            if(updatedItem == null)
+            {
+                return new ToDoItem();
+            }
+            updatedItem.Description = item.Description;
+            updatedItem.Id = item.Id;
+            updatedItem.Name = item.Name;
+            await _context.SaveChangesAsync();
+            return updatedItem; 
         }
     }
 }
