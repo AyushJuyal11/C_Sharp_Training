@@ -1,6 +1,6 @@
 ﻿namespace ToDoList.Models.ResponseViewModels
 {
-    public class ToDoItemResponse
+    public class ToDoResponse
     {
         public int Id { get; set; }
         public string Name { get; set; }

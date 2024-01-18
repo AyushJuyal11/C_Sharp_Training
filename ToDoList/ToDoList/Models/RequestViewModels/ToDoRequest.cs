@@ -1,8 +1,8 @@
 ﻿namespace ToDoList.Models.RequestViewModels
 {
-    public class ToDoItemRequest
+    public class ToDoRequest
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
     }

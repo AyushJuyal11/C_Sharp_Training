@@ -16,8 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddScoped<IToDoItemService, ToDoItemService>();
-builder.Services.AddScoped<IToDoListOperations, ToDoListOperations>(); 
+builder.Services.AddScoped<IToDoService, ToDoService>();
+builder.Services.AddScoped<IToDoRepository, ToDoRepository>(); 
 builder.Services.AddDbContext<ToDoApplicationContext>(options => options.UseSqlServer("name=ToDoApplicationConnection"));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 

@@ -11,6 +11,6 @@ namespace ToDoList.DAL.DbContexts
         {
             base.OnModelCreating(modelBuilder);
         }
-        public DbSet<ToDoItem> ToDoItems { get; set; }
+        public DbSet<ToDoEntity> ToDoItems { get; set; }
     }
 }

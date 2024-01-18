@@ -9,9 +9,9 @@ namespace ToDoList.Utilities
     {
         public AutoMapperProfiles() 
         {
-            CreateMap<ToDoItemRequest, ToDoItem>();
-            CreateMap<ToDoItemResponse , ToDoItem>();
-            CreateMap<ToDoItem, ToDoItemResponse>(); 
+            CreateMap<ToDoRequest, ToDoEntity>();
+            CreateMap<ToDoResponse , ToDoEntity>();
+            CreateMap<ToDoEntity, ToDoResponse>(); 
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 namespace ToDoList.DAL.Entities
 {
-    public class ToDoItem
+    public class ToDoEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
