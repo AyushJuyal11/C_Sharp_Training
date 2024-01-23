@@ -1,3 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using ToDoList.DAL.DbContexts;
+using ToDoList.DAL.Repositories.Implementations;
+using ToDoList.DAL.Repositories.Interfaces;
+using ToDoList.Services.Implementations;
+using ToDoList.Services.Interfaces;
+using ToDoList.Utilities;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,8 +15,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
 
+builder.Services.AddScoped<IToDoService, ToDoService>();
+builder.Services.AddScoped<IToDoRepository, ToDoRepository>(); 
+builder.Services.AddDbContext<ToDoApplicationContext>(options => options.UseSqlServer("name=ToDoApplicationConnection"));
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

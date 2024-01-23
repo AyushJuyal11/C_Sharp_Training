@@ -1,7 +1,13 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ToDoList.DAL.DbContexts;
 using ToDoList.DAL.Entities;
 using ToDoList.DAL.Repositories.Implementations;
 using ToDoList.DAL.Repositories.Interfaces;
+using ToDoList.Models.RequestViewModels;
+using ToDoList.Models.ResponseViewModels;
+using ToDoList.Services.Interfaces;
+using ToDoList.ResponseModels; 
 
 namespace ToDoList.Controllers
 {
@@ -10,46 +16,106 @@ namespace ToDoList.Controllers
     public class ToDoListController : ControllerBase
     {
 
-        private ToDoListOperations _task = new();
+        private readonly IToDoService _toDoServices; 
+        public ToDoListController(IToDoService services)
+        {
+            _toDoServices=services;
+        }
 
         [HttpGet("get-all-tasks")]
         public async Task<IActionResult> GetAllTasksAsync()
         {
-            var tasks = await _task.GettingAllTasksAsync();
-            if (tasks == null) return NotFound();
-            else return Ok(tasks);
+            APIResponse response = new(); 
+            try
+            {
+                IEnumerable<ToDoResponse> allItems = await _toDoServices.GetAllItemsAsync();
+                response.Body = allItems;
+                return Ok(response);
+            }
+            catch(Exception e)
+            {
+                response.Message = e.Message;
+                response.Code = "500";
+                response.Errors = e.ToString(); 
+                return Ok(response); 
+            }
         }
 
         [HttpPost("add-task")]
-        public async Task<IActionResult> AddTaskAsync([FromBody] ToDoItem item)
+        public async Task<IActionResult> AddTaskAsync([FromBody] ToDoRequest item)
         {
-            int result = await _task.AddNewTaskAsync(item);
-            if (result <= 0) return BadRequest();
-            else return Ok("task created with task id = " + item.Id); 
+
+            APIResponse response = new(); 
+            try
+            {
+                ToDoResponse addedItem = await _toDoServices.AddItemAsync(item);
+                response.Body = addedItem; 
+                return Ok(response);
+            }
+            catch(Exception e)
+            {
+                response.Errors = e.ToString();
+                response.Code = "400"; 
+                response.Message = e.Message; 
+                return Ok(response);
+            }
         }
 
         [HttpGet("get-task")]
-        public async Task<IActionResult> GetTaskAsync(int id)
+        public async Task<ActionResult> GetTaskAsync(int id)
         {
-            var t = await _task.GetTaskByIdAsync(id);
-            if(t == null) return NotFound();
-            return Ok(t);
+            APIResponse response = new(); 
+            try
+            {
+                ToDoResponse requestedToDoItem = await _toDoServices.GetItemByIdAsync(id);
+                response.Body = requestedToDoItem; 
+                return Ok(response);
+            }
+            catch(Exception e)
+            {
+                response.Errors = e.ToString();
+                response.Code = "404"; 
+                response.Message = e.Message; 
+                return Ok(response);
+            }
         }
 
         [HttpPut("update-task")]
-        public async Task<IActionResult> UpdateTaskAsync([FromBody]ToDoItem item)
+        public async Task<ActionResult> UpdateTaskAsync([FromBody] ToDoRequest item)
         {
-            var result = await _task.UpdatingTaskAsync(item);
-            if (result < 0) return BadRequest();
-            else return Ok($"task updated with task id {item.Id}"); 
+            APIResponse response = new(); 
+            try
+            {
+                ToDoResponse updatedToDoItem = await _toDoServices.UpdateItemAsync(item);
+                response.Body = updatedToDoItem;
+                return Ok(response); 
+            }
+            catch(Exception e)
+            {
+                response.Errors = e.ToString();
+                response.Code = "404"; 
+                response.Message = e.Message; 
+                return Ok(response);
+            }
         }
 
         [HttpDelete("delete-task")]
         public async Task<IActionResult> DeleteTaskAsync(int id)
         {
-            var result = await _task.DeletingTaskAsync(id);
-            if(result <= 0) return NotFound();
-            return Ok("task deleted");
+            APIResponse response = new();
+            try
+            {
+                ToDoResponse deletedToDoItem = await _toDoServices.DeleteItemByIdAsync(id);
+                response.Body = deletedToDoItem;
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                response.Errors = e.ToString();
+                response.Code = "404";
+                response.Message = e.Message;
+                return Ok(response);
+            }
         }
     }
 }
