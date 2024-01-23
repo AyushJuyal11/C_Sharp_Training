@@ -22,14 +22,14 @@ namespace SoapConfigAPI.Services.Implementations
 
         public async Task<IEnumerable<UserResponseModelList>> GetAllSoapConfigsAsync()
         {
-            IEnumerable<SoapConfig> allFiles = await _soapConfigRepository.GetAllSoapConfigsAsync();
-            if(allFiles == null) { throw new Exception("There are no files currently "); }
+            IEnumerable<SoapConfig> allSoapConfigs = await _soapConfigRepository.GetAllSoapConfigsAsync();
+            if(allSoapConfigs == null) { throw new Exception("There are no soapConfigs currently "); }
 
             List<UserResponseModelList> userList = new(); 
-            foreach(SoapConfig file in allFiles)
+            foreach(SoapConfig soapConfig in allSoapConfigs)
             {
                 XmlSerializer serializer = new(typeof(UserResponseModelList));
-                using (StringReader reader = new(file.XML))
+                using (StringReader reader = new(soapConfig.XML))
                 {
                     userList.Add((UserResponseModelList)serializer.Deserialize(reader));
                 }
@@ -39,37 +39,37 @@ namespace SoapConfigAPI.Services.Implementations
 
         public async Task<IEnumerable<UserResponseModel>> GetSoapConfigByIdAsync(int ID)
         {
-           SoapConfig requiredFile = await _soapConfigRepository.GetSoapConfigByIdAsync(ID)??throw new Exception("File not found");
+           SoapConfig requiredSoapConfig = await _soapConfigRepository.GetSoapConfigByIdAsync(ID)??throw new Exception("SoapConfig not found");
            UserResponseModelList userList = new(); 
 
            XmlSerializer serializer = new(typeof(UserResponseModelList)); 
-           using(StringReader reader = new(requiredFile.XML))
+           using(StringReader reader = new(requiredSoapConfig.XML))
             {
                 userList = (UserResponseModelList)serializer.Deserialize(reader);
             }
             return userList.Users; 
         }
 
-        public async Task<int> AddSoapConfigAsync(SoapConfigRequest file)
+        public async Task<int> AddSoapConfigAsync(SoapConfigRequest soapConfig)
         {
-            SoapConfig? fileToAdd = _mapper.Map<SoapConfig>(file);
-            SoapConfig? addedFile = await _soapConfigRepository.AddSoapConfigAsync(fileToAdd);
-            if (addedFile == null) throw new Exception("bad request");
+            SoapConfig? soapConfigToAdd = _mapper.Map<SoapConfig>(soapConfig);
+            SoapConfig? addedSoapConfig = await _soapConfigRepository.AddSoapConfigAsync(soapConfigToAdd);
+            if (addedSoapConfig == null) throw new Exception("bad request");
             else return 1; 
         }
 
         public async Task<int> DeleteSoapConfigAsync(int ID)
         {
-            SoapConfig fileToBeDeleted = await _soapConfigRepository.DeleteSoapConfigAsync(ID);
-            if (fileToBeDeleted == null) throw new Exception("file not found");
+            SoapConfig soapConfigToBeDeleted = await _soapConfigRepository.DeleteSoapConfigAsync(ID);
+            if (soapConfigToBeDeleted == null) throw new Exception("soapConfig not found");
             else return 1; 
         }
 
-        public async Task<int> UpdateSoapConfigAsync(SoapConfigRequest file)
+        public async Task<int> UpdateSoapConfigAsync(SoapConfigRequest soapConfig)
         {
-            SoapConfig fileToBeUpdated = _mapper.Map<SoapConfig>(file); 
-            SoapConfig updatedFile = await _soapConfigRepository.UpdateSoapConfigAsync(fileToBeUpdated);
-            if (updatedFile == null) throw new Exception("file not found");
+            SoapConfig soapConfigToBeUpdated = _mapper.Map<SoapConfig>(soapConfig); 
+            SoapConfig updatedSoapConfig = await _soapConfigRepository.UpdateSoapConfigAsync(soapConfigToBeUpdated);
+            if (updatedSoapConfig == null) throw new Exception("soapConfig not found");
             else return 1; 
         }
     }
