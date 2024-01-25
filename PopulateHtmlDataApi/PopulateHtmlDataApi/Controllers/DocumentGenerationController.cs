@@ -31,7 +31,7 @@ namespace PopulateHtmlDataApi.Controllers
             APIResponse response = new();
             try
             {
-                HtmlTemplateResponseModel htmlTemplateResponseModel = await _htmlTemplateService.GetHtmlTemplateByIdAsync(2);
+                HtmlTemplateResponseModel htmlTemplateResponseModel = await _htmlTemplateService.GetHtmlTemplateByIdAsync(4);
                 UserResponseModel userResponseModel = await _userService.GetUserByPolicyNumberAsync(userRequestModel.PolicyNumber);
                 DocumentEntity document = await _documentGenerationService.GenerateDocumentAsync(userResponseModel, htmlTemplateResponseModel.Content);
                 int result = await _documentAddService.AddDocumentAsync(document); 

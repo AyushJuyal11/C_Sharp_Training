@@ -4,6 +4,6 @@ namespace PopulateHtmlDataApi.DAL.Repositories.Interfaces
 {
     public interface IDocumentRepository
     {
-        Task<DocumentEntity> AddDocumentAsync(DocumentEntity documentEntity);
+        Task<int> AddDocumentAsync(DocumentEntity documentEntity);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using PopulateHtmlDataApi.DAL.Entities;
-using PopulateHtmlDataApi.Models.ResponseViewModels;
 
 namespace PopulateHtmlDataApi.Services.Interfaces
 {

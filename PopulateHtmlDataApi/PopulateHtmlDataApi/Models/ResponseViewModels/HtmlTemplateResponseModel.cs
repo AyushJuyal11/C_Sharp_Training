@@ -7,7 +7,6 @@
         public DateTime ModifiedDatetime {  get; set;}
         public DateTime CreationDatetime {  get; set;}
         public string Content { get; set;}
-        public string BinaryContent { get; set; } 
         public bool IsDeleted { get; set;}
 
     }

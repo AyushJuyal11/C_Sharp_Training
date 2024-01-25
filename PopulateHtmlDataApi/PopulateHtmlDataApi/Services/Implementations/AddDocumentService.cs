@@ -1,6 +1,5 @@
 ﻿using PopulateHtmlDataApi.DAL.Entities;
 using PopulateHtmlDataApi.DAL.Repositories.Interfaces;
-using PopulateHtmlDataApi.Models.ResponseViewModels;
 using PopulateHtmlDataApi.Services.Interfaces;
 
 namespace PopulateHtmlDataApi.Services.Implementations
@@ -16,8 +15,8 @@ namespace PopulateHtmlDataApi.Services.Implementations
 
         public async Task<int> AddDocumentAsync(DocumentEntity document)
         {
-            var result = await _documentRepository.AddDocumentAsync(document);
-            if (result == null) throw new Exception("Not found");
+            int result = await _documentRepository.AddDocumentAsync(document);
+            if (result == -1) throw new Exception("Not found");
             else return 1; 
         }
     }

@@ -11,8 +11,6 @@ namespace PopulateHtmlDataApi.DAL.Entities
 
         public DateTime CreatedDateTime {  get; set;} = DateTime.Now;
         public string Content { get; set;}
-        public string ContentBinary { get; set; } = " ";
-
         public bool IsDeleted { get; set; } = false; 
     }
 }

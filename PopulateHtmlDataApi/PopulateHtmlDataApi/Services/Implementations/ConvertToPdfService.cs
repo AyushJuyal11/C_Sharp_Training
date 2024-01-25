@@ -7,6 +7,8 @@ namespace PopulateHtmlDataApi.Services.Implementations
     {
         public async Task<byte[]> GetByteDataAsync(string mappedHtmlData)
         {
+            using var browserFetcher = new BrowserFetcher();
+            await browserFetcher.DownloadAsync();
             await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
             using(var page = await browser.NewPageAsync()){
                 await page.SetContentAsync(mappedHtmlData);
