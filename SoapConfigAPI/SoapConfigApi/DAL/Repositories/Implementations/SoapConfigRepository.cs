@@ -9,45 +9,45 @@ namespace SoapConfigAPI.DAL.Repositories.Implementations
     {
         private readonly SoapConfigDbContext _context = context;
 
-        public async Task<SoapConfig> AddSoapConfigAsync(SoapConfig fileToAdd)
+        public async Task<SoapConfig> AddSoapConfigAsync(SoapConfig soapConfigToAdd)
         {
-            fileToAdd.CreationDateTime = DateTime.UtcNow; 
-            fileToAdd.ModifiedDateTime = DateTime.UtcNow;
-            _context.Add(fileToAdd);
+            soapConfigToAdd.CreationDateTime = DateTime.UtcNow; 
+            soapConfigToAdd.ModifiedDateTime = DateTime.UtcNow;
+            _context.Add(soapConfigToAdd);
             await _context.SaveChangesAsync();
-            return fileToAdd; 
+            return soapConfigToAdd; 
         }
 
         public async Task<SoapConfig> DeleteSoapConfigAsync(int ID)
         {
-            SoapConfig? fileToBeDeleted = await _context.SoapConfigs.FindAsync(ID);
-            _context.Remove(fileToBeDeleted);
+            SoapConfig? soapConfigToBeDeleted = await _context.SoapConfigs.FindAsync(ID);
+            _context.Remove(soapConfigToBeDeleted);
             await _context.SaveChangesAsync();
-            return fileToBeDeleted;
+            return soapConfigToBeDeleted;
         }
 
         public async Task<IEnumerable<SoapConfig>> GetAllSoapConfigsAsync()
         {
-            List<SoapConfig> allXmlFiles = await _context.SoapConfigs.ToListAsync();
-            return allXmlFiles;
+            List<SoapConfig> allXmlSoapConfigs = await _context.SoapConfigs.ToListAsync();
+            return allXmlSoapConfigs;
         }
 
         public async Task<SoapConfig> GetSoapConfigByIdAsync(int ID)
         {
-            SoapConfig? requiredFile = await _context.SoapConfigs.FindAsync(ID);
-            return requiredFile;
+            SoapConfig? requiredSoapConfig = await _context.SoapConfigs.FindAsync(ID);
+            return requiredSoapConfig;
         }
 
-        public async Task<SoapConfig> UpdateSoapConfigAsync(SoapConfig updatedFile)
+        public async Task<SoapConfig> UpdateSoapConfigAsync(SoapConfig updatedSoapConfig)
         {
-            SoapConfig? fileToBeUpdated = await _context.SoapConfigs.FindAsync(updatedFile.ID);
-            fileToBeUpdated.ID = updatedFile.ID;
-            fileToBeUpdated.XML = updatedFile.XML;
-            fileToBeUpdated.Code = updatedFile.Code;
-            fileToBeUpdated.ModifiedDateTime = DateTime.UtcNow;
-            fileToBeUpdated.CreationDateTime = updatedFile.CreationDateTime;
+            SoapConfig? soapConfigToBeUpdated = await _context.SoapConfigs.FindAsync(updatedSoapConfig.ID);
+            soapConfigToBeUpdated.ID = updatedSoapConfig.ID;
+            soapConfigToBeUpdated.XML = updatedSoapConfig.XML;
+            soapConfigToBeUpdated.Code = updatedSoapConfig.Code;
+            soapConfigToBeUpdated.ModifiedDateTime = DateTime.UtcNow;
+            soapConfigToBeUpdated.CreationDateTime = updatedSoapConfig.CreationDateTime;
             await _context.SaveChangesAsync();
-            return fileToBeUpdated;
+            return soapConfigToBeUpdated;
         }
     }
 }

@@ -59,12 +59,12 @@ namespace SoapConfigAPI.Controllers
         }
 
         [HttpPost("[Action]")]
-        public async Task<ActionResult> AddSoapConfigAsync([FromBody]SoapConfigRequest file)
+        public async Task<ActionResult> AddSoapConfigAsync([FromBody]SoapConfigRequest soapConfig)
         {
             APIResponse response = new();
             try
             {
-                var result = await _soapConfigService.AddSoapConfigAsync(file);
+                var result = await _soapConfigService.AddSoapConfigAsync(soapConfig);
                 return Ok("file added "); 
             }
 
@@ -96,13 +96,13 @@ namespace SoapConfigAPI.Controllers
             }
         }
 
-        [HttpPut("[Action]{ID:int}")]
-        public async Task<ActionResult> UpdateSoapConfigAsync(SoapConfigRequest file)
+        [HttpPut("[Action]")]
+        public async Task<ActionResult> UpdateSoapConfigAsync(SoapConfigRequest soapConfig)
         {
             APIResponse response = new();
             try
             {
-                var result = await _soapConfigService.UpdateSoapConfigAsync(file);
+                var result = await _soapConfigService.UpdateSoapConfigAsync(soapConfig) ;
                 return Ok("file updated"); 
             }
             
