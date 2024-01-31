@@ -17,9 +17,9 @@ namespace ToDoList.Controllers
     {
 
         private readonly IToDoService _toDoServices; 
-        public ToDoListController(IToDoService services)
+        public ToDoListController(IToDoService toDoServices)
         {
-            _toDoServices=services;
+            _toDoServices=toDoServices;
         }
 
         [HttpGet("get-all-tasks")]
