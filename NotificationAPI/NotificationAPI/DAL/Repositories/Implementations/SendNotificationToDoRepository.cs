@@ -19,17 +19,5 @@ namespace NotificationAPI.DAL.Repositories.Implementations
             var viewEntities = await _context.SendNotificationToDos.Where(e => e.IsGenerated == false).ToListAsync();
             return viewEntities;
         }
-        public async Task<int> UpdateIsGeneratedFlagAsync()
-        {
-            List<User> allUsers = await _context.Users.ToListAsync();
-            if (allUsers.Count == 0) return -1; 
-            foreach(var user in allUsers)
-            {
-                user.IsGenerated = true;
-            }
-            Console.WriteLine(allUsers[0]);
-            await _context.SaveChangesAsync();
-            return 1; 
-        }
     }
 }

@@ -5,16 +5,16 @@ namespace NotificationAPI.Services.Implementations
 {
     public class UpdateFlagService : IUpdateFlagService
     {
-        private readonly ISendNotificationToDoRepository _sendNotificationToDoRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UpdateFlagService(ISendNotificationToDoRepository sendNotificationToDoRepository)
+        public UpdateFlagService(IUserRepository userRepository)
         {
-            _sendNotificationToDoRepository=sendNotificationToDoRepository;
+            _userRepository=userRepository;
         }
 
-        public async Task<int> UpdateIsGeneratedFlagAsync()
+        public async Task<int> UpdateIsGeneratedFlagAsync(string PolicyNumber)
         {
-            int result = await _sendNotificationToDoRepository.UpdateIsGeneratedFlagAsync();
+            int result = await _userRepository.UpdateIsGeneratedFlagAsync(PolicyNumber);
             return result; 
         }
     }

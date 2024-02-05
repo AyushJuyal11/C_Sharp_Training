@@ -1,4 +1,5 @@
-﻿using NotificationAPI.Services.Interfaces;
+﻿using NotificationAPI.DAL.Entities;
+using NotificationAPI.Services.Interfaces;
 
 namespace NotificationAPI.Handlers.Implementations
 {
@@ -10,11 +11,10 @@ namespace NotificationAPI.Handlers.Implementations
             _myMailService = serviceProvider.GetRequiredService<IMyMailService>(); 
         }
 
-        public async override Task<int> ProcessRequestAsync()
+        public async override Task<int> ProcessRequestAsync(SendNotificationToDo entity)
         {
-            int result = await _myMailService.SendMailAsync(); 
+            int result = await _myMailService.SendMailAsync(entity); 
             return result;
         }
-
     }
 }

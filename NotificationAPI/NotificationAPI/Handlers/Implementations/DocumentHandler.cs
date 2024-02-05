@@ -1,4 +1,5 @@
-﻿using NotificationAPI.Handlers.Interfaces;
+﻿using NotificationAPI.DAL.Entities;
+using NotificationAPI.Handlers.Interfaces;
 
 namespace NotificationAPI.Handlers.Implementations
 {
@@ -10,13 +11,13 @@ namespace NotificationAPI.Handlers.Implementations
         {
             this.nextHandler = nextHandler;
         }
-        public abstract Task<int> ProcessRequestAsync();
+        public abstract Task<int> ProcessRequestAsync(SendNotificationToDo entity);
 
-        public async Task HandleAsync(IDocumentHandler handler)
+        public async Task HandleAsync(IDocumentHandler handler , SendNotificationToDo entity)
         {
-            await handler.ProcessRequestAsync(); 
+            await handler.ProcessRequestAsync(entity); 
             if(nextHandler != null) {
-                await HandleAsync(nextHandler);
+                await HandleAsync(nextHandler, entity);
             }
         }
     }

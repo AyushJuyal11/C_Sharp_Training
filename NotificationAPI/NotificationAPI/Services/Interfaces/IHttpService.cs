@@ -4,6 +4,6 @@ namespace NotificationAPI.Services.Interfaces
 {
     public interface IHttpService
     {
-        Task<int> SendUserData(UserRequestModel user); 
+        Task<int> SendUserDataAsync(UserRequestModel user); 
     }
 }

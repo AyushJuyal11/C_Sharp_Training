@@ -2,6 +2,6 @@
 {
     public interface IGenericHttpService
     {
-        Task<int> SendUserData(string apiUrl, HttpMethod httpMethod, StringContent content); 
+        Task<int> SendUserDataAsync(string apiUrl, HttpMethod httpMethod, StringContent content); 
     }
 }

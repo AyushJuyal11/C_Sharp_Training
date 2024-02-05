@@ -11,16 +11,16 @@ namespace NotificationAPI.Controllers
         private readonly IRecurringJobManager _recurringJobManager;
         private readonly IPrintService _printService; 
 
-        public JobController(IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
+        public JobController(IServiceProvider serviceProvider)
         {
-            _recurringJobManager = recurringJobManager;
+            _recurringJobManager = serviceProvider.GetRequiredService<IRecurringJobManager>();
             _printService = serviceProvider.GetRequiredService<IPrintService>();
         }
 
         [HttpPost("[Action]")]
-        public IActionResult SendMail()
+        public IActionResult GenerateDocument()
         {
-            _recurringJobManager.AddOrUpdate("post-mail", () => _printService.InitiateRequestAsync(), "0/1 * * * *");
+            _recurringJobManager.AddOrUpdate("post-mail", () => _printService.PrintAndSaveDocumentAsync(), "0/1 * * * *");
             return Ok(); 
         }
     }

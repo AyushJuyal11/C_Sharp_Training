@@ -2,6 +2,6 @@
 {
     public interface IUpdateFlagService 
     {
-        Task<int> UpdateIsGeneratedFlagAsync();
+        Task<int> UpdateIsGeneratedFlagAsync(string PolicyNumber);
     }
 }

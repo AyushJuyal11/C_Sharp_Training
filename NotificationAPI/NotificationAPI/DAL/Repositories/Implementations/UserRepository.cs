@@ -17,6 +17,15 @@ namespace NotificationAPI.DAL.Repositories.Implementations
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return user;
+
+       }
+        public async Task<int> UpdateIsGeneratedFlagAsync(string PolicyNumber)
+        {
+            var entity = _context.Users.Where(e => e.PolicyNumber == PolicyNumber).FirstOrDefault();
+            if (entity == null) { return -1; }
+            entity.IsGenerated = true;
+            await _context.SaveChangesAsync();
+            return 1;
         }
     }
 }

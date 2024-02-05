@@ -11,7 +11,7 @@ namespace NotificationAPI.Services.Implementations
         {
             _httpClient = serviceProvider.GetRequiredService<HttpClient>();
         }
-        public async Task<int> SendUserData(string apiUrl, HttpMethod httpMethod, StringContent content)
+        public async Task<int> SendUserDataAsync(string apiUrl, HttpMethod httpMethod, StringContent content)
         {
             var request = new HttpRequestMessage(httpMethod , apiUrl);
             HttpResponseMessage response = await _httpClient.SendAsync(request);

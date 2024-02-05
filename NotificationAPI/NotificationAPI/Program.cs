@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using NotificationAPI.Handlers.Interfaces;
 using NotificationAPI.Handlers.Implementations;
 
-var builder = WebApplication.CreateBuilder(args); 
+var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -21,7 +21,8 @@ builder.Services.AddEndpointsApiExplorer();
 //HANGFIRE CONFIG
 builder.Services.AddHangfire(configuration =>
 {
-    configuration.UseSqlServerStorage("Server=.;Database=HangFireDemo; Integrated Security = True; TrustServerCertificate = True;");
+    var con = builder.Configuration.GetConnectionString("DefaultConnection"); 
+    configuration.UseSqlServerStorage(con); 
     configuration.UseHeartbeatPage(checkInterval: TimeSpan.FromSeconds(1));
     configuration.UseRecurringJobAdmin(typeof(Program).Assembly);
 }

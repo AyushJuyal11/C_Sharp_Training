@@ -27,8 +27,8 @@ namespace NotificationAPI.Controllers
             APIResponse response = new();
             try
             {
-                var result = await _userService.AddUserAsync(user);
-                var microserviceResult = _httpService.SendUserData(user); 
+                int result = await _userService.AddUserAsync(user);
+                Task<int> httpResponse = _httpService.SendUserDataAsync(user); 
                 response.Body = result;
                 return Ok(response + "Policy created");
             }

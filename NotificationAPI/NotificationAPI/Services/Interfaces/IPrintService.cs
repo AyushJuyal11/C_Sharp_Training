@@ -2,6 +2,6 @@
 {
     public interface IPrintService
     {
-        Task InitiateRequestAsync(); 
+        Task PrintAndSaveDocumentAsync(); 
     }
 }
