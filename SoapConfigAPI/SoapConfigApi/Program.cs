@@ -5,6 +5,7 @@ using SoapConfigAPI.DAL.Repositories.Interfaces;
 using SoapConfigAPI.Services.Implementations;
 using SoapConfigAPI.Services.Interfaces;
 using SoapConfigAPI.Utilities;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ISoapConfigRepository, SoapConfigRepository>(); 
 builder.Services.AddScoped<ISoapConfigService, SoapConfigService>(); 
 builder.Services.AddDbContext<SoapConfigDbContext>(options => options.UseSqlServer("name=XMLDeserializeConnection"));
-builder.Services.AddAutoMapper(typeof(AutoMapperProfiles)); 
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+//logger config 
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger(); 
 
 var app = builder.Build();
 

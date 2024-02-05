@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using SoapConfigAPI.Models.RequestViewModels;
 using SoapConfigAPI.Models.ResponseViewModels;
 using SoapConfigAPI.ResponseModels;
@@ -26,6 +27,7 @@ namespace SoapConfigAPI.Controllers
             {
                 List<UserResponseModel> userResponseModels = (List<UserResponseModel>)await _soapConfigService.GetSoapConfigByIdAsync(ID);
                 response.Body = userResponseModels;
+                Log.Information(response.ToString()); 
                 return Ok(response);
             }
 
@@ -34,6 +36,7 @@ namespace SoapConfigAPI.Controllers
                 response.Message = e.Message;
                 response.Errors = e.ToString();
                 response.Code = "404";
+                Log.Information(response.ToString()); 
                 return Ok(response); 
             }
         }
@@ -46,6 +49,7 @@ namespace SoapConfigAPI.Controllers
             {
                 List<UserResponseModelList> allUsers = (List<UserResponseModelList>)await _soapConfigService.GetAllSoapConfigsAsync();
                 response.Body = allUsers;
+                Log.Information($"{response.ToString()}"); 
                 return Ok(response); 
             }
 
@@ -54,6 +58,7 @@ namespace SoapConfigAPI.Controllers
                 response.Message = e.Message;
                 response.Errors = e.ToString();
                 response.Code = "404";
+                Log.Information($"{response.ToString()}");
                 return Ok(response); 
             }
         }
@@ -65,6 +70,7 @@ namespace SoapConfigAPI.Controllers
             try
             {
                 var result = await _soapConfigService.AddSoapConfigAsync(soapConfig);
+                Log.Information($"{response.ToString()}");
                 return Ok("file added "); 
             }
 
@@ -73,6 +79,7 @@ namespace SoapConfigAPI.Controllers
                 response.Message = e.Message;
                 response.Errors = e.ToString();
                 response.Code = "401";
+                Log.Information($"{response.ToString()}"); 
                 return Ok(response); 
             }
         }
@@ -84,6 +91,7 @@ namespace SoapConfigAPI.Controllers
             try
             {
                 var result = await _soapConfigService.DeleteSoapConfigAsync(ID);
+                Log.Information($"{response.ToString()}"); 
                 return Ok("file deleted"); 
             }
 
@@ -92,6 +100,7 @@ namespace SoapConfigAPI.Controllers
                 response.Message = e.Message;
                 response.Errors = e.ToString();
                 response.Code = "404";
+                Log.Information($"{response.ToString()}"); 
                 return Ok(response); 
             }
         }
@@ -103,6 +112,7 @@ namespace SoapConfigAPI.Controllers
             try
             {
                 var result = await _soapConfigService.UpdateSoapConfigAsync(soapConfig) ;
+                Log.Information($"{response.ToString()}"); 
                 return Ok("file updated"); 
             }
             
@@ -111,6 +121,7 @@ namespace SoapConfigAPI.Controllers
                 response.Message = e.Message;
                 response.Errors = e.ToString();
                 response.Code = "404"; 
+                Log.Information($"{response.ToString()}"); 
                 return Ok(response);
             }
         }

@@ -25,7 +25,9 @@ namespace ReflectionTask.Models
         public string ProductCode { get; set; }
 
         [MapHtmlData("{{PolicyExpiryDate}}")]
-        public string PolicyExpiryDate { set { _policyExpiryDate = value; } get { return DateTime.ParseExact(_policyExpiryDate, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"); } }
+        public string PolicyExpiryDate { 
+            set { _policyExpiryDate = value; }
+            get { return DateTime.ParseExact(_policyExpiryDate, "yyyyMMdd", null).ToString("dd'/'MM'/'yyyy"); } }
 
         public Employee() { }
 
